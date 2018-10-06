@@ -87,7 +87,7 @@ int main(int argc, char *argv[])
 	print_big_int(&firstNumber);
 	printf("\n%d\n",len);
 	multiply(&firstNumber, 5, &result);
-	print_big_int(&firstNumber);
+
 	printf("\n\n");
 	print_big_int(&result);
 	return 0;
@@ -114,9 +114,10 @@ printf("\n");
 }
 
 void multiply(const struct BigInt *big_int, int factor, struct BigInt *big_result){
+	int overflowNumber=0;
 	for (int i = big_int->digits_count-1 ; i >0; i++) {		     //for loop which counts from the end of the integer to the beginning, like we'd do it in reallife
 		int tempResult=big_int->the_int[i]*factor;								//tempResult is the temporary Result
-		int overflowNumber=0;																		//overflowNumber value, always contains the overflow of the previous result.
+		
 		if (tempResult>9) {																		//here we check if the tempResult is bigger than 9, because if it is, we'd have to split the two parts (e.g. 1 and 4 for 14) and put 1 to the next
 				big_result->the_int[i]=tempResult%10+overflowNumber;
 				overflowNumber=tempResult/10;
