@@ -76,28 +76,34 @@ void copy_big_int(const struct BigInt *from, struct BigInt *to);
 int main(int argc, char *argv[])
 {
 	struct BigInt firstNumber;
-	char userInput[MAX_DIGITS];
+	char userInput[2];
 	printf("Pyramid of numbers\n\n");
 	printf("Please enter a number: " );
-	scanf("%s\n",userInput );
-	printf("\n\n\n\n");
-	print_big_int(&firstNumber);
+	scanf("%s",userInput );
 	int len=strlen(userInput);
+	len=strtobig_int(userInput, len, &firstNumber);
+	firstNumber.digits_count=len;
+	print_big_int(&firstNumber);
+	printf("\n%d\n",len);
 	return 0;
 }
 
 int strtobig_int(const char *str, int len, struct BigInt *big_int){
-	int charCounter=0;
-	for (int i = len-1; i>0; i++) {
-			big_int->the_int[i]=str[i];
-			charCounter++;
+	int counter=0;
+	for (size_t i = 0; i < len; i++) {
+		if(str[i]>='0'&&str[i]<='9'){
+			int temp=str[i]-'0';
+			big_int -> the_int[i] = temp;
+			counter++;
+		}
 	}
-	return charCounter;
+	return counter;
 }
 
+
 void print_big_int(const struct BigInt *big_int){
-for (int i=0; i < MAX_DIGITS; i++) {
+for (int i=0; i < big_int->digits_count; i++) {
 	printf("%d",big_int->the_int[i] );
 }
-printf("\n" );
+printf("\n");
 }
