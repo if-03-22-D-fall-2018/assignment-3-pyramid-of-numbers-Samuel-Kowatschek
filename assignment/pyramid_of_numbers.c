@@ -14,6 +14,7 @@
  */
 #include <stdio.h>
 #include <string.h>
+#include <stdbool.h>
 
 /// The maximum number of digits allowed in a big int.
 #define MAX_DIGITS 80
@@ -24,7 +25,6 @@
 struct BigInt {
 	/** number of digits of the big int. */
 	int digits_count;
-
 
 	/** array of digits of big int. */
 	unsigned int the_int[MAX_DIGITS];
@@ -76,6 +76,7 @@ void copy_big_int(const struct BigInt *from, struct BigInt *to);
 int main(int argc, char *argv[])
 {
 	struct BigInt firstNumber;
+	struct BigInt result;
 	char userInput[2];
 	printf("Pyramid of numbers\n\n");
 	printf("Please enter a number: " );
@@ -85,6 +86,10 @@ int main(int argc, char *argv[])
 	firstNumber.digits_count=len;
 	print_big_int(&firstNumber);
 	printf("\n%d\n",len);
+	multiply(&firstNumber, 5, &result);
+	print_big_int(&firstNumber);
+	printf("\n\n");
+	print_big_int(&result);
 	return 0;
 }
 
@@ -106,4 +111,17 @@ for (int i=0; i < big_int->digits_count; i++) {
 	printf("%d",big_int->the_int[i] );
 }
 printf("\n");
+}
+
+void multiply(const struct BigInt *big_int, int factor, struct BigInt *big_result){
+	for (int i = big_int->digits_count-1 ; i >0; i++) {		     //for loop which counts from the end of the integer to the beginning, like we'd do it in reallife
+		int tempResult=big_int->the_int[i]*factor;								//tempResult is the temporary Result
+		int overflowNumber=0;																		//overflowNumber value, always contains the overflow of the previous result.
+		if (tempResult>9) {																		//here we check if the tempResult is bigger than 9, because if it is, we'd have to split the two parts (e.g. 1 and 4 for 14) and put 1 to the next
+				big_result->the_int[i]=tempResult%10+overflowNumber;
+				overflowNumber=tempResult/10;
+		}else{
+			big_result->the_int[i]=tempResult+overflowNumber;
+		}
+	}
 }
