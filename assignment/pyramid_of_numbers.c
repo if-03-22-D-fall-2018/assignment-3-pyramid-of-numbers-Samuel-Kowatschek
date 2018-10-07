@@ -1,5 +1,5 @@
-/*----------------------------------------------------------
- *				HTBLA-Leonding / Class: 2DHIF
+ /*				HTBLA-Leonding / Class: 2DHIF
+ *----------------------------------------------------------
  * ---------------------------------------------------------
  * Exercise Number: 03
  * Title:			Pyramid of Numbers
@@ -77,10 +77,10 @@ int main(int argc, char *argv[])
 {
 	struct BigInt firstNumber;
 	struct BigInt result;
-	char userInput[2];
+	char userInput[5];
 	printf("Pyramid of numbers\n\n");
 	printf("Please enter a number: " );
-	scanf("%s",userInput );
+	scanf("%s",&userInput[0] );
 	int len=strlen(userInput);
 	len=strtobig_int(userInput, len, &firstNumber);
 	firstNumber.digits_count=len;
@@ -90,12 +90,14 @@ int main(int argc, char *argv[])
 
 	printf("\n\n");
 	print_big_int(&result);
+
+
 	return 0;
 }
 
 int strtobig_int(const char *str, int len, struct BigInt *big_int){
 	int counter=0;
-	for (size_t i = 0; i < len; i++) {
+	for (int i = 0; i < len; i++) {
 		if(str[i]>='0'&&str[i]<='9'){
 			int temp=str[i]-'0';
 			big_int -> the_int[i] = temp;
@@ -115,14 +117,16 @@ printf("\n");
 
 void multiply(const struct BigInt *big_int, int factor, struct BigInt *big_result){
 	int overflowNumber=0;
-	for (int i = big_int->digits_count-1 ; i >0; i++) {		     //for loop which counts from the end of the integer to the beginning, like we'd do it in reallife
-		int tempResult=big_int->the_int[i]*factor;								//tempResult is the temporary Result
-		
-		if (tempResult>9) {																		//here we check if the tempResult is bigger than 9, because if it is, we'd have to split the two parts (e.g. 1 and 4 for 14) and put 1 to the next
-				big_result->the_int[i]=tempResult%10+overflowNumber;
-				overflowNumber=tempResult/10;
-		}else{
-			big_result->the_int[i]=tempResult+overflowNumber;
-		}
-	}
+		for (int i = big_int->digits_count-1 ; i >0; i--) {		     //for loop which counts from the end of the integer to the beginning, like we'd do it in reallife
+			int tempResult=big_int->the_int[i]*factor;								//tempResult is the temporary Result
+
+			if (tempResult>9) {																		//here we check if the tempResult is bigger than 9, because if it is, we'd have to split the two parts (e.g. 1 and 4 for 14) and put 1 to the next
+					int temp=tempResult%10+overflowNumber;
+					big_result->the_int[i]=temp;
+					overflowNumber=tempResult/10;
+				}else{
+					int temp=tempResult%10+overflowNumber;
+					big_result->the_int[i]=temp;
+				}
+			}
 }
