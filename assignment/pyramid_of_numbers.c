@@ -119,27 +119,29 @@ printf("\n");
 
 void multiply(const struct BigInt *big_int, int factor, struct BigInt *big_result){
 	int overflowNumber=0;
-	int newOverflowNumber=0;
+	int newOverflowNumber=0;																			//integer newOverflowNumber is the new overflowNumber, so it's like a little cache for the overflowNumber
 	for (int i = big_int->digits_count-1 ; i >=0; i--) {		     //for loop which counts from the end of the integer to the beginning, like we'd do it in reallife
 		int tempResult=big_int->the_int[i]*factor;								//tempResult is the temporary Result
 
 		if (tempResult>9) {																		//here we check if the tempResult is bigger than 9, because if it is, we'd have to split the two parts (e.g. 1 and 4 for 14) and put 1 to the next
 				newOverflowNumber=tempResult/10;
-				if(i==0&&newOverflowNumber>0){
-                    big_result->the_int[i+1]=tempResult%10+overflowNumber;
-                    big_result->digits_count=(big_int->digits_count) +1;
-                    big_result->the_int[i]=newOverflowNumber;
-				}else if(i==0){
+				if(i==0&&newOverflowNumber>0){									//This if checks if the result is bigger tan big_int
+                    big_result->the_int[i+1]=tempResult%10+overflowNumber;	//if it is bigger, the "normal" number should be on position i+1, so more right, and the newOverflowNumber should be on pos i
+                    big_result->digits_count=(big_int->digits_count) +1;   //Also the length of the result would be one larger than the length of the big_int
+										big_result->the_int[i]=newOverflowNumber;
+				}else if(i==0){																							//if i == 0 but we don't have a new overflowNumber, the big_result int should just be tempResult+overFlowNumber
 				    big_result->the_int[i]=tempResult%10+overflowNumber;
-                    big_result->digits_count=big_int->digits_count;
+            big_result->digits_count=big_int->digits_count;				//also the length would be just as big as the length of the big_int
+				}else{
+					big_result->the_int[i]=tempResult+overflowNumber;				//this is basically the default case
 				}
 				overflowNumber=newOverflowNumber;
 		}else{
 
-			if(i==0&&overflowNumber>0){
-                    big_result->the_int[i+1]=tempResult+overflowNumber;
-                    big_result->digits_count=(big_int->digits_count) +1;
-                    big_result->the_int[i]=overflowNumber;
+			if(i==0&&overflowNumber>0){																								//integer newOverflowNumber is the new overflowNumber, so it's like a little cache for the overflowNumber
+                    big_result->the_int[i+1]=tempResult+overflowNumber;				//here we dont need the modulu 10 next  to the tempresult because it only has one digit.
+                    big_result->digits_count=(big_int->digits_count) +1;			//length would be big_int len +1
+                    big_result->the_int[i]=overflowNumber;										//the_int[i] is only overFlowNumber, not newOverflowNumber, because there is no newOverflowNumber
 				}else if(i==0){
 				    big_result->the_int[i]=tempResult+overflowNumber;
                     big_result->digits_count=big_int->digits_count;
