@@ -63,6 +63,8 @@ void divide(const struct BigInt *big_int, int divisor, struct BigInt *big_result
 */
 void copy_big_int(const struct BigInt *from, struct BigInt *to);
 
+void put_digits_to_the_right(struct BigInt *big_int);
+
 /**
 *** main() reads the base number from which the pyramid has to be calculated
 *** into an array of char. The max. length of this number is MAX_DIGITS.
@@ -129,6 +131,26 @@ printf("\n");
 void multiply(const struct BigInt *big_int, int factor, struct BigInt *big_result){
 	int overflowNumber=0;
 	int newOverflowNumber=0;
+	int tempResult;
+	for (size_t i = big_int->digits_count-1; i > 0; i++) {
+		tempResult=big_int->the_int[i]*factor+overflowNumber;
+		if(tempResult>9){
+			newOverflowNumber=tempResult/10;
+			if(i==0){
+				big_result->the_int[i]=tempResult%10;
+				big_result->digits_count=(big_int->digits_count) +1;
+				put_digits_to_the_right(big_result);
+				big_result->the_int[i]=newOverflowNumber;
+			}
+		}
+	}
+
+}
+
+/*
+void multiply(const struct BigInt *big_int, int factor, struct BigInt *big_result){
+	int overflowNumber=0;
+	int newOverflowNumber=0;
 	for (int i = big_int->digits_count-1 ; i >=0; i--) {		     //for loop which counts from the end of the integer to the beginning, like we'd do it in reallife
 		int tempResult=big_int->the_int[i]*factor;								//tempResult is the temporary Result
 
@@ -176,6 +198,13 @@ void multiply(const struct BigInt *big_int, int factor, struct BigInt *big_resul
 
 	}
 
+}
+*/
+
+void put_digits_to_the_right(struct BigInt *big_int){
+	for (int i= big_int->digits_count ; i >=0; i++) {
+		big_int->the_int[i]=big_int->the_int[i-1];
+	}
 }
 
 void divide(const struct BigInt *big_int, int divisor, struct BigInt *big_result){
