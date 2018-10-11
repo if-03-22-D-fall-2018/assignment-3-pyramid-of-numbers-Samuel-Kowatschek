@@ -103,6 +103,9 @@ int main(int argc, char *argv[])
 	print_big_int(&firstNumber);
 	print_big_int(&result);
 	printf("end");
+
+
+
 	return 0;
 }
 
@@ -132,9 +135,8 @@ void multiply(const struct BigInt *big_int, int factor, struct BigInt *big_resul
 	int overflowNumber=0;
 	int newOverflowNumber=0;
 	int tempResult;
-	int result=0;
 	big_result->digits_count=big_int->digits_count;
-	for (size_t i = big_int->digits_count-1; i > 0; i++) {
+	for (size_t i = big_int->digits_count-1; i > 0; i--) {
 		tempResult=big_int->the_int[i]*factor+overflowNumber;
 		if(tempResult>9){
 			newOverflowNumber=tempResult/10;
