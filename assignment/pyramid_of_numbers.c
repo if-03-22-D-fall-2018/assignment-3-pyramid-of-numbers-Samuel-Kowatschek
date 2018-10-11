@@ -132,20 +132,28 @@ void multiply(const struct BigInt *big_int, int factor, struct BigInt *big_resul
 	int overflowNumber=0;
 	int newOverflowNumber=0;
 	int tempResult;
+	int result=0;
+	big_result->digits_count=big_int->digits_count;
 	for (size_t i = big_int->digits_count-1; i > 0; i++) {
 		tempResult=big_int->the_int[i]*factor+overflowNumber;
 		if(tempResult>9){
 			newOverflowNumber=tempResult/10;
 			if(i==0){
 				big_result->the_int[i]=tempResult%10;
-				big_result->digits_count=(big_int->digits_count) +1;
+				big_result->digits_count++;
 				put_digits_to_the_right(big_result);
 				big_result->the_int[i]=newOverflowNumber;
+			}else{
+				big_result->the_int[i]=tempResult%10;
 			}
+			overflowNumber=newOverflowNumber;
+		}else{
+				big_result->the_int[i]=tempResult%10;
 		}
 	}
-
 }
+
+
 
 /*
 void multiply(const struct BigInt *big_int, int factor, struct BigInt *big_result){
