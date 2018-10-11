@@ -89,19 +89,23 @@ int main(int argc, char *argv[])
 	firstNumber.digits_count=len;
 	print_big_int(&firstNumber);
 	printf("\n%d\n",len);
+
 	multiply(&firstNumber, 5, &result);
 	printf("\n\n");
-
 	print_big_int(&result);
+
 	divide(&firstNumber, 5, &result);
 	print_big_int(&result);
 	printf("\n");
+
 	print_big_int(&firstNumber);
 	print_big_int(&result);
 	printf("\n\n");
+
 	copy_big_int(&firstNumber, &result);
 	print_big_int(&firstNumber);
 	print_big_int(&result);
+
 	printf("end");
 
 
@@ -154,62 +158,6 @@ void multiply(const struct BigInt *big_int, int factor, struct BigInt *big_resul
 		}
 	}
 }
-
-
-
-/*
-void multiply(const struct BigInt *big_int, int factor, struct BigInt *big_result){
-	int overflowNumber=0;
-	int newOverflowNumber=0;
-	for (int i = big_int->digits_count-1 ; i >=0; i--) {		     //for loop which counts from the end of the integer to the beginning, like we'd do it in reallife
-		int tempResult=big_int->the_int[i]*factor;								//tempResult is the temporary Result
-
-
-		if (tempResult>9) {																		//here we check if the tempResult is bigger than 9, because if it is, we'd have to split the two parts (e.g. 1 and 4 for 14) and put 1 to the next
-				newOverflowNumber=tempResult/10;
-				if(i==0&&tempResult+overflowNumber>9){
-                    big_result->the_int[i+1]=tempResult%10+overflowNumber;
-
-                    big_result->digits_count=(big_int->digits_count) +1;
-
-                    big_result->the_int[i]=newOverflowNumber;
-				}else if(i==0){
-
-				    big_result->the_int[i]=tempResult%10+overflowNumber;
-				    big_result->digits_count=big_int->digits_count;
-				    for(int i = big_int->digits_count-1; i >0 ;i--){
-
-                        big_result->the_int[i]=big_result->the_int[i-1];
-				    }
-				}else{
-				    big_result->the_int[i]=(tempResult+overflowNumber)%10;
-
-				}
-        overflowNumber=newOverflowNumber;
-		}
-		else{
-
-			if(i==0&&overflowNumber+tempResult>9){
-                    big_result->the_int[i+1]=(tempResult+overflowNumber);
-                    big_result->digits_count=(big_int->digits_count) +1;
-                    big_result->the_int[i]=overflowNumber;
-				}else if(i==0){
-
-				    big_result->the_int[i]=tempResult+overflowNumber;
-
-                    big_result->digits_count=big_int->digits_count;
-				}else{
-
-                    big_result->the_int[i]=tempResult+overflowNumber;
-				}
-				overflowNumber=0;
-		}
-		newOverflowNumber=0;
-
-	}
-
-}
-*/
 
 void put_digits_to_the_right(struct BigInt *big_int){
 	for (int i= big_int->digits_count ; i >=0; i++) {
