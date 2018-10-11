@@ -277,7 +277,7 @@ int main(int argc, char *argv[])
 {
 	struct BigInt firstNumber;
 	struct BigInt result;
-	char userInput[MAX_DIGITS];
+	char userInput[80];
 	printf("Pyramid of numbers\n\n");
 	printf("Please enter a number: " );
 	scanf("%s",userInput );
@@ -287,19 +287,11 @@ int main(int argc, char *argv[])
 	print_big_int(&firstNumber);
 	printf("\n%d\n",len);
 
-<<<<<<< HEAD
 	multiply(&firstNumber, 9, &result);
 	printf("\n\n");
 	print_big_int(&result);
 
 	divide(&firstNumber, 9, &result);
-=======
-	multiply(&firstNumber, 5, &result);
-	printf("\n\n");
-	print_big_int(&result);
-
-	divide(&firstNumber, 5, &result);
->>>>>>> 5b0f84ea727199cca37514054fd46e95d9fc722c
 	print_big_int(&result);
 	printf("\n");
 
@@ -344,11 +336,7 @@ void multiply(const struct BigInt *big_int, int factor, struct BigInt *big_resul
 	int newOverflowNumber=0;
 	int tempResult;
 	big_result->digits_count=big_int->digits_count;
-<<<<<<< HEAD
 	for (size_t i = big_int->digits_count-1; i >= 0 && i<big_result->digits_count; i--) {
-=======
-	for (size_t i = big_int->digits_count-1; i > 0; i--) {
->>>>>>> 5b0f84ea727199cca37514054fd46e95d9fc722c
 		tempResult=big_int->the_int[i]*factor+overflowNumber;
 		if(tempResult>9){
 			newOverflowNumber=tempResult/10;
@@ -368,11 +356,7 @@ void multiply(const struct BigInt *big_int, int factor, struct BigInt *big_resul
 }
 
 void put_digits_to_the_right(struct BigInt *big_int){
-<<<<<<< HEAD
 	for (int i= big_int->digits_count-1 ; i >0; i--) {
-=======
-	for (int i= big_int->digits_count ; i >=0; i++) {
->>>>>>> 5b0f84ea727199cca37514054fd46e95d9fc722c
 		big_int->the_int[i]=big_int->the_int[i-1];
 	}
 }
