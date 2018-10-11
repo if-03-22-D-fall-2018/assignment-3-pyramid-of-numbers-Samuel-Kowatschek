@@ -1,3 +1,200 @@
+
+
+1
+2
+3
+4
+5
+6
+7
+8
+9
+10
+11
+12
+13
+14
+15
+16
+17
+18
+19
+20
+21
+22
+23
+24
+25
+26
+27
+28
+29
+30
+31
+32
+33
+34
+35
+36
+37
+38
+39
+40
+41
+42
+43
+44
+45
+46
+47
+48
+49
+50
+51
+52
+53
+54
+55
+56
+57
+58
+59
+60
+61
+62
+63
+64
+65
+66
+67
+68
+69
+70
+71
+72
+73
+74
+75
+76
+77
+78
+79
+80
+81
+82
+83
+84
+85
+86
+87
+88
+89
+90
+91
+92
+93
+94
+95
+96
+97
+98
+99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161
+162
+163
+164
+165
+166
+167
+168
+169
+170
+171
+172
+173
+174
+175
+176
+177
+178
+179
+180
+181
+182
+183
+184
+185
+186
+187
+188
+189
+190
+191
+192
+193
+
+
 /*----------------------------------------------------------
  *				HTBLA-Leonding / Class: 2DHIF
  * ---------------------------------------------------------
@@ -63,6 +260,8 @@ void divide(const struct BigInt *big_int, int divisor, struct BigInt *big_result
 */
 void copy_big_int(const struct BigInt *from, struct BigInt *to);
 
+void put_digits_to_the_right(struct BigInt *big_int);
+
 /**
 *** main() reads the base number from which the pyramid has to be calculated
 *** into an array of char. The max. length of this number is MAX_DIGITS.
@@ -78,7 +277,7 @@ int main(int argc, char *argv[])
 {
 	struct BigInt firstNumber;
 	struct BigInt result;
-	char userInput[80];
+	char userInput[MAX_DIGITS];
 	printf("Pyramid of numbers\n\n");
 	printf("Please enter a number: " );
 	scanf("%s",userInput );
@@ -87,95 +286,79 @@ int main(int argc, char *argv[])
 	firstNumber.digits_count=len;
 	print_big_int(&firstNumber);
 	printf("\n%d\n",len);
-	multiply(&firstNumber, 5, &result);
-	printf("\n\n");
 
+	multiply(&firstNumber, 9, &result);
+	printf("\n\n");
 	print_big_int(&result);
-	divide(&firstNumber, 5, &result);
+
+	divide(&firstNumber, 9, &result);
 	print_big_int(&result);
 	printf("\n");
+
 	print_big_int(&firstNumber);
 	print_big_int(&result);
 	printf("\n\n");
+
 	copy_big_int(&firstNumber, &result);
 	print_big_int(&firstNumber);
 	print_big_int(&result);
+
 	printf("end");
+
+
+
 	return 0;
 }
 
 int strtobig_int(const char *str, int len, struct BigInt *big_int){
 	int counter=0;
-
 	for (size_t i = 0; i < len; i++) {
 		if(str[i]>='0'&&str[i]<='9'){
 			int temp=str[i]-'0';
 			big_int->the_int[counter] = temp;
 			counter++;
+		}else{
+            return -1;
 		}
 	}
-
-
     return counter;
 }
 
 void print_big_int(const struct BigInt *big_int){
-for (int i=0; i < big_int->digits_count; i++) {
-	printf("%d",big_int->the_int[i] );
-}
-printf("\n");
+    for (int i=0; i < big_int->digits_count; i++) {
+        printf("%d",big_int->the_int[i] );
+    }
+ }
 }
 
 void multiply(const struct BigInt *big_int, int factor, struct BigInt *big_result){
 	int overflowNumber=0;
 	int newOverflowNumber=0;
-	for (int i = big_int->digits_count-1 ; i >=0; i--) {		     //for loop which counts from the end of the integer to the beginning, like we'd do it in reallife
-		int tempResult=big_int->the_int[i]*factor;								//tempResult is the temporary Result
-
-
-		if (tempResult>9) {																		//here we check if the tempResult is bigger than 9, because if it is, we'd have to split the two parts (e.g. 1 and 4 for 14) and put 1 to the next
-				newOverflowNumber=tempResult/10;
-				if(i==0&&tempResult+overflowNumber>9){
-                    big_result->the_int[i+1]=tempResult%10+overflowNumber;
-
-                    big_result->digits_count=(big_int->digits_count) +1;
-
-                    big_result->the_int[i]=newOverflowNumber;
-				}else if(i==0){
-
-				    big_result->the_int[i]=tempResult%10+overflowNumber;
-				    big_result->digits_count=big_int->digits_count;
-				    for(int i = big_int->digits_count-1; i >0 ;i--){
-
-                        big_result->the_int[i]=big_result->the_int[i-1];
-				    }
-				}else{
-				    big_result->the_int[i]=(tempResult+overflowNumber)%10;
-
-				}
-        overflowNumber=newOverflowNumber;
+	int tempResult;
+	big_result->digits_count=big_int->digits_count;
+	for (size_t i = big_int->digits_count-1; i >= 0 && i<big_result->digits_count; i--) {
+		tempResult=big_int->the_int[i]*factor+overflowNumber;
+		if(tempResult>9){
+			newOverflowNumber=tempResult/10;
+			if(i==0){
+				big_result->the_int[i]=tempResult%10;
+				big_result->digits_count++;
+				put_digits_to_the_right(big_result);
+				big_result->the_int[i]=newOverflowNumber;
+			}else{
+				big_result->the_int[i]=tempResult%10;
+			}
+			overflowNumber=newOverflowNumber;
+		}else{
+				big_result->the_int[i]=tempResult%10;
 		}
-		else{
-
-			if(i==0&&overflowNumber+tempResult>9){
-                    big_result->the_int[i+1]=(tempResult+overflowNumber);
-                    big_result->digits_count=(big_int->digits_count) +1;
-                    big_result->the_int[i]=overflowNumber;
-				}else if(i==0){
-
-				    big_result->the_int[i]=tempResult+overflowNumber;
-
-                    big_result->digits_count=big_int->digits_count;
-				}else{
-
-                    big_result->the_int[i]=tempResult+overflowNumber;
-				}
-				overflowNumber=0;
-		}
-		newOverflowNumber=0;
-
 	}
+}
 
+void put_digits_to_the_right(struct BigInt *big_int){
+	for (int i= big_int->digits_count-1 ; i >0; i--) {
+		big_int->the_int[i]=big_int->the_int[i-1];
+	}
 }
 
 void divide(const struct BigInt *big_int, int divisor, struct BigInt *big_result){
