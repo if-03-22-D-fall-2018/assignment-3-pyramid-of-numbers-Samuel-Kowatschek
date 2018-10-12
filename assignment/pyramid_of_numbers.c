@@ -1,4 +1,3 @@
-
 /*----------------------------------------------------------
  *				HTBLA-Leonding / Class: 2DHIF
  * ---------------------------------------------------------
@@ -88,26 +87,8 @@ int main(int argc, char *argv[])
 	int len=strlen(userInput);
 	len=strtobig_int(userInput, len, &current_big_int);
 	current_big_int.digits_count=len;
-	/*print_big_int(&current_big_int);
-	printf("\n%d\n",len);
 
-	multiply(&current_big_int, 9, &result);
-	printf("\n\n");
-	print_big_int(&result);
-
-	divide(&current_big_int, 9, &result);
-	print_big_int(&result);
-	printf("\n");
-
-	print_big_int(&current_big_int);
-	print_big_int(&result);
-	printf("\n\n");
-
-	copy_big_int(&current_big_int, &result);
-	print_big_int(&current_big_int);
-	print_big_int(&result);
-*/
-	for (int i = 2; i < 10; i++) {
+	for (int i = 2; i < 20; i++) {
 		multiply(&current_big_int, i, &result);
 		print_big_int(&current_big_int);
 		printf(" * ");
@@ -116,10 +97,15 @@ int main(int argc, char *argv[])
 		printf("\n");
 		current_big_int=result;
 	}
-	printf("end");
-
-
-
+	for(int i = 2;i<20;i++){
+        divide(&current_big_int, i, &result);
+		print_big_int(&current_big_int);
+		printf(" / ");
+		printf(" %d = ",i);
+		print_big_int(&result);
+		printf("\n");
+		current_big_int=result;
+	}
 	return 0;
 }
 
@@ -164,6 +150,7 @@ void multiply(const struct BigInt *big_int, int factor, struct BigInt *big_resul
 			overflowNumber=newOverflowNumber;
 		}else{
 				big_result->the_int[i]=tempResult%10;
+				overflowNumber=0;
 		}
 	}
 }
@@ -183,14 +170,14 @@ void divide(const struct BigInt *big_int, int divisor, struct BigInt *big_result
         temp=(big_int->the_int[i]+overflowNumber)/divisor;
         if(temp==0&&alreadyNumberSetted){
 
-            big_result->the_int[counter]=(big_int->the_int[i]+overflowNumber)/divisor;
+            big_result->the_int[counter]=temp;
             counter++;
         }else if(temp!=0){
          alreadyNumberSetted=true;
-         big_result->the_int[counter]=(big_int->the_int[i]+overflowNumber)/divisor;
+         big_result->the_int[counter]=temp;
          counter++;
         }
-        overflowNumber=big_int->the_int[i]%divisor;
+        overflowNumber=(big_int->the_int[i]+overflowNumber)%divisor;
         overflowNumber*=10;
     }
     big_result->digits_count=counter;
