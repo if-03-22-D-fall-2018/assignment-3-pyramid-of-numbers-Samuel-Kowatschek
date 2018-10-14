@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
 {
 	struct BigInt current_big_int;
 	struct BigInt result;
-	char userInput[80];
+	char userInput[MAX_DIGITS];
 	printf("Pyramid of numbers\n\n");
 	printf("Please enter a number: " );
 	scanf("%s",userInput );
@@ -88,7 +88,7 @@ int main(int argc, char *argv[])
 	len=strtobig_int(userInput, len, &current_big_int);
 	current_big_int.digits_count=len;
 
-	for (int i = 2; i < 20; i++) {
+	for (int i = 2; i < 10; i++) {
 		multiply(&current_big_int, i, &result);
 		print_big_int(&current_big_int);
 		printf(" * ");
@@ -97,7 +97,7 @@ int main(int argc, char *argv[])
 		printf("\n");
 		current_big_int=result;
 	}
-	for(int i = 2;i<20;i++){
+	for(int i = 2;i<10;i++){
         divide(&current_big_int, i, &result);
 		print_big_int(&current_big_int);
 		printf(" / ");
